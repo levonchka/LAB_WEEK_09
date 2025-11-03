@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("androidx.compose.material3:material3:1.2.0")
     implementation("androidx.compose.foundation:foundation:1.7.0")
     implementation("androidx.navigation:navigation-compose:2.7.4")
