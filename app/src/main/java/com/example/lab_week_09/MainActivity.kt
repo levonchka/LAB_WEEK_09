@@ -12,13 +12,17 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.lab_week_09.ui.theme.LAB_WEEK_09Theme
+import com.example.lab_week_09.ui.theme.OnBackgroundItemText
+import com.example.lab_week_09.ui.theme.OnBackgroundTitleText
+import com.example.lab_week_09.ui.theme.PrimaryTextButton
 
-
+// ==============================
 // Main Activity
-
+// ==============================
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,18 +39,18 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+// ==============================
 // Data Model
-
+// ==============================
 data class Student(
     var name: String
 )
 
+// ==============================
 // Parent Composable
-
+// ==============================
 @Composable
 fun Home() {
-    // State list yang menyimpan data mahasiswa
     val listData = remember {
         mutableStateListOf(
             Student("Tanu"),
@@ -55,12 +59,10 @@ fun Home() {
         )
     }
 
-    // State untuk input text
     var inputField = remember {
         mutableStateOf(Student(""))
     }
 
-    // Memanggil composable child dengan parameter
     HomeContent(
         listData,
         inputField.value,
@@ -74,7 +76,9 @@ fun Home() {
     )
 }
 
+// ==============================
 // Child Composable
+// ==============================
 @Composable
 fun HomeContent(
     listData: SnapshotStateList<Student>,
@@ -83,7 +87,7 @@ fun HomeContent(
     onButtonClick: () -> Unit
 ) {
     LazyColumn {
-        // Bagian input
+        // Header dan input
         item {
             Column(
                 modifier = Modifier
@@ -91,46 +95,39 @@ fun HomeContent(
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Enter item",
-                    style = MaterialTheme.typography.titleMedium
-                )
+                // Custom Title Text (themed)
+                OnBackgroundTitleText(text = stringResource(id = R.string.enter_item))
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Input Field
+                // TextField untuk input nama
                 TextField(
                     value = inputField.name,
                     onValueChange = { onInputValueChange(it) },
-                    label = { Text("Student Name") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text
-                    )
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Tombol Tambah
-                Button(onClick = { onButtonClick() }) {
-                    Text(text = "Add Student")
+                // Custom Button (themed)
+                PrimaryTextButton(text = stringResource(id = R.string.button_click)) {
+                    onButtonClick()
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
 
-        // Menampilkan daftar Student
+        // List items
         items(listData) { item ->
             Column(
                 modifier = Modifier
                     .padding(vertical = 4.dp)
-                    .fillMaxWidth(),
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = item.name,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                // Custom Item Text (themed)
+                OnBackgroundItemText(text = item.name)
             }
         }
     }
